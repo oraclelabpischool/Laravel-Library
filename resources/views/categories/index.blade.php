@@ -11,7 +11,7 @@
     </head>
     <body>
         <div class="container shadow mt-4 p-4">
-            <h1>Hello World!</h1>
+            <h1>Category List</h1>
             @if (session("success"))
                 <div class="alert alert-success">
                     {{ session("success") }}
@@ -55,7 +55,12 @@
                                 <td>{{  $data->category_name }} </td>
                                 <td>
                                     <a href="category/{{  $data->id }}">Update</a>
-                                    <a href="category/{{  $data->id }}">Delete</a>
+                                    <form method="POST" action="category/{{  $data->id }}">
+                                        @method('DELETE')
+                                         @csrf
+                                    <button type="submit">
+                                        Delete</submit>
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach
