@@ -32,7 +32,7 @@ class CategoryController extends Controller
             'category_name' => $request->category_name
         ]);
 
-        return redirect("/category")->with("success", "category has been added!");
+        return redirect("/admin/category")->with("success", "category has been added!");
     }
 
      public function show($id)
@@ -58,7 +58,7 @@ class CategoryController extends Controller
         $data->category_name = $request->category_name;
         $data->save();
 
-        return redirect("/category")->with("success", "category has been updated!");
+        return redirect("/admin/category")->with("success", "category has been updated!");
     }
 
     /**
@@ -68,6 +68,6 @@ class CategoryController extends Controller
     {
         $data = Category::find($id);
         $data->delete();
-        return redirect("/category")->with("success", "category has been deleted!");
+        return redirect("/admin/category")->with("success", "category has been deleted!");
     }
 }

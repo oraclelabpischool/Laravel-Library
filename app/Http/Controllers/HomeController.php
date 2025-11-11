@@ -8,7 +8,6 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $datas = Category::all();
-        return view('welcome', compact('datas'));
+        return view('home.index');
     }
 }
