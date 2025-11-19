@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Book;
+use App\Models\Borrow;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class BorrowController extends Controller
 {
@@ -13,7 +15,12 @@ class BorrowController extends Controller
     public function index()
     {
         $books = Book::all();
-        return view("borrow.index", compact('books'));
+        $users = User::whereHas('role', function ($query) {
+            $query->where('role_name', '=', 'member');
+        })->get();
+        $borrows = Borrow::with('user', 'book')->get();
+
+        return view('borrow.index', compact('books', 'users', 'borrows'));
     }
 
     /**
@@ -21,7 +28,24 @@ class BorrowController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'book_id' => 'required|exists:books,id',
+            'user_id' => 'required|exists:users,id',
+            'qty' => 'required|digits_between:1,2',
+            'start_borrow' => 'required|date',
+            'end_borrow' => 'required|date',
+        ]);
+
+        Borrow::create([
+            'book_id' => $request->book_id,
+            'user_id' => $request->user_id,
+            'qty' => $request->qty,
+            'start_borrow' => $request->start_borrow,
+            'end_borrow' => $request->end_borrow,
+            'fine' => 0,
+        ]);
+
+        return redirect('/admin/borrow')->with('success', 'borrow data has been created!');
     }
 
     /**
